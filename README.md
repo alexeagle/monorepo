@@ -1,28 +1,31 @@
-[![Build Status](https://travis-ci.org/angular/angular.svg?branch=master)](https://travis-ci.org/angular/angular)
-[![CircleCI](https://circleci.com/gh/angular/angular/tree/master.svg?style=shield)](https://circleci.com/gh/angular/angular/tree/master)
-[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=LzF3RzBVVGt6VWE2S0hHaC9uYllOZz09LS1BVjNTclBKV0x4eVRlcjA4QVY1M0N3PT0=--eb4ce8c8dc2c1c5b2b5352d473ee12a73ac20e06)](https://www.browserstack.com/automate/public-build/LzF3RzBVVGt6VWE2S0hHaC9uYllOZz09LS1BVjNTclBKV0x4eVRlcjA4QVY1M0N3PT0=--eb4ce8c8dc2c1c5b2b5352d473ee12a73ac20e06)
-[![Join the chat at https://gitter.im/angular/angular](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/angular/angular?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![npm version](https://badge.fury.io/js/%40angular%2Fcore.svg)](https://www.npmjs.com/@angular/core)
+# Angular Monorepo
 
+This is a prototype for a new repository we would host on the github.com/angular org.
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/angular2-ci.svg)](https://saucelabs.com/u/angular2-ci)
+It would be a single master upstream tree for all Angular projects, including Material,
+CLI/Devkit, Universal, etc.
 
-*Safari (7+), iOS (7+) and IE mobile (11) are tested on [BrowserStack][browserstack].*
+It's also suitable for
+- other Angular related projects that want to share build/CI infrastructure with us,
+  eg. AngularFire or ngRx
+- Hosting examples of how enterprise-scale development works
 
-# Angular
+## Design
 
-Angular is a development platform for building mobile and desktop web applications using Typescript/JavaScript and other languages.
+TODO(alexeagle): fill in more detail
 
-## Quickstart
-
-[Get started in 5 minutes][quickstart].
-
-## Want to help?
-
-Want to file a bug, contribute some code, or improve documentation? Excellent! Read up on our
-guidelines for [contributing][contributing] and then check out one of our issues in the [hotlist: community-help](https://github.com/angular/angular/labels/hotlist%3A%20community-help).
-
-[browserstack]: https://www.browserstack.com/automate/public-build/LzF3RzBVVGt6VWE2S0hHaC9uYllOZz09LS1BVjNTclBKV0x4eVRlcjA4QVY1M0N3PT0=--eb4ce8c8dc2c1c5b2b5352d473ee12a73ac20e06
-[contributing]: http://github.com/angular/angular/blob/master/CONTRIBUTING.md
-[quickstart]: https://angular.io/docs/ts/latest/quickstart.html
-[ng]: http://angular.io
+- Each existing repository can choose to stay open to collect issues and PRs, or
+  archive and merge fully into angular/angular.
+- The repository should switch to Bazel at the same time, so that it's possible
+  to have incremental build/CI across the whole tree. Otherwise CI would become
+  impossible because of the volume of tests times the number of commits.
+- angular/angular would stay open and would collect issues/PRs/milestones etc.
+- angular/monorepo would have the canonical post-merge CI - we want a global
+  green across all our projects at head
+- Enforce that certain subtrees are owned in a given repository, eg. don't allow
+  changes to angular/packages/core to land in the material repository.
+- Some tooling - to be created - should automatically create a merge PR from
+  green angular/monorepo back down to each repository. And each change merged to
+  a repository should be cherry-picked as a PR to angular/monorepo. Whenever one
+  of these merge/cherry-pick PRs fails, alert the caretaker that there's a CI
+  breakage between different repositories.
